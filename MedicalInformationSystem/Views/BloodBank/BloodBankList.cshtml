@@ -1,0 +1,62 @@
+﻿@model MedicalInformationSystem.ViewModels.BloodBankListViewModel
+
+@{
+    ViewBag.Title = "BloodBankList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Blood BankList</h2>
+
+@Html.ActionLink("Add Bank", "NewBank", "BloodBank", null, new { @class = "btn btn-primary" }) <br /> <br />
+
+<table class="table table-hover table-bordered" id="bank">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <td>Action</td>
+        </tr>
+    </thead>
+
+    @foreach (var bank in Model.BloodBanks)
+    {
+        <tr>
+            <td>@Html.ActionLink(bank.Name, "Details", "BloodBank", new { id = bank.Id }, null)</td>
+            <td>@bank.Address</td>
+            <td><button class="btn btn-link js-delete" data-bank-id="@bank.Id">Delete</button> | @Html.ActionLink("Edit", "Edit", "BloodBank", new { id = bank.Id }, new { @class = "btn btn-link" })</td>
+        </tr>
+    }
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+
+            var table = $("#bank").DataTable();
+
+            $("#bank").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                bootbox.confirm("Are You Sure To Delete This", function (result) {
+
+                    if (result) {
+
+                        $.ajax({
+
+                            url: "/api/bloodbanks/" + button.attr("data-bank-id"),
+                            method: "DELETE",
+                            success: function () {
+
+                                table.row(button.parents("tr")).remove().draw();
+                                toastr.success("Record Deleted");
+                            }
+                        });
+                    }
+                });
+            });
+
+
+        });
+    </script>
+}

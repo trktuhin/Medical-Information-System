@@ -1,0 +1,77 @@
+﻿@model IEnumerable<MedicalInformationSystem.Models.BloodBank>
+
+@{
+    ViewBag.Title = "DoctorApproveList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Doctor Approve List</h2>
+
+@using (Html.BeginForm("GetList","Approve"))
+{
+    <div class="form-group">
+        @Html.Label("Select Approve List")
+        @Html.DropDownList("approveId",new List<SelectListItem>
+        {
+            new SelectListItem { Value = "1",Text = "Doctor",Selected = true},
+            new SelectListItem { Value = "2",Text = "Hospital"},
+            new SelectListItem { Value = "3",Text = "Ambulance"},
+            new SelectListItem { Value = "4",Text = "Phermacy"},
+            new SelectListItem { Value = "5",Text = "BloodBank"}
+        },new {@class="form-control"})
+    </div>
+    
+    <input type="submit" value="Submit" class="btn btn-primary"/> <br/><br/>
+}
+
+<table class="table table-bordered table-hover" id="approve">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+
+    </thead>
+
+    @foreach (var bank in Model)
+    {
+        <tr>
+            <td>@Html.ActionLink(bank.Name, "Details", "BloodBank", new { id = bank.Id }, null)</td>
+            <td><button class="btn btn-link js-update" data-am-id="@bank.Id">Approve</button></td>
+        </tr>
+    }
+
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+            var table = $("#approve").DataTable();
+
+            $("#approve").on("click", ".js-update", function () {
+
+                var button = $(this);
+
+                $.ajax({
+
+                    url: "/api/bloodbanks/" + button.attr("data-am-id"),
+                    method: "PUT",
+                    success: function () {
+
+                        console.log("ok");
+
+                        table.row(button.parents("tr")).remove().draw();
+
+                        toastr.success("Approved");
+
+                        console.log("ok");
+                    }
+
+                });
+            });
+
+        });
+    </script>
+}

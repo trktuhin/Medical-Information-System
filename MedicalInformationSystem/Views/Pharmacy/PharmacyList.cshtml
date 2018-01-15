@@ -1,0 +1,71 @@
+﻿@model MedicalInformationSystem.ViewModels.PharmacyFormViewModel
+
+@{
+    ViewBag.Title = "PharmacyList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Pharmacy List</h2>
+
+@Html.ActionLink("New Pharmacy", "NewPharmacy","Pharmacy", null, new { @class = "btn btn-primary" }) <br/> <br/>
+
+<table class="table table-bordered table-hover" id="pharmacy">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Area</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    @foreach (var pharmacy in Model.Pharmacies)
+    {
+        <tr>
+            <td>
+               @Html.ActionLink(pharmacy.Name,"Details","Pharmacy",new {id = pharmacy.Id},null)
+            </td>
+            <td>
+                @pharmacy.Area
+            </td>
+            <td>
+                <button class="btn btn-link js-delete" data-phar-id="@pharmacy.Id">Delete</button> | @Html.ActionLink("Edit", "Edit", "Pharmacy", new { id = pharmacy.Id }, new {@class="btn btn-link"})
+            </td>
+        </tr>
+    }
+</table>
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function() {
+
+            var table = $("#pharmacy").DataTable();
+
+            $("#pharmacy").on("click", ".js-delete", function() {
+                
+                var button = $(this);
+
+                bootbox.confirm("Are You Sure To Delete This", function (result) {
+
+                    if (result) {
+
+                        $.ajax({
+
+                            url: "/api/pharmacies/" + button.attr("data-phar-id"),
+                            method: "DELETE",
+                            success: function () {
+
+                                table.row(button.parents("tr")).remove().draw();
+                                toastr.success("Record Deleted");
+                            }
+                        });
+                    }
+                });
+
+            });
+
+        });
+
+    </script>
+}

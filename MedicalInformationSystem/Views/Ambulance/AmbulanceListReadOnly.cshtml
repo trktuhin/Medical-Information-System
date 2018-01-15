@@ -1,0 +1,69 @@
+﻿@model MedicalInformationSystem.ViewModels.AmbulanceListViewModel
+
+@{
+    ViewBag.Title = "AmbulanceList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Ambulance List</h2>
+
+@if (!String.IsNullOrEmpty(Model.Massage))
+{
+    <p style="text-align: center"><b>@Model.Massage</b></p>
+}
+
+@if (Request.IsAuthenticated)
+{
+    @Html.ActionLink("New Ambulance", "NewAmbulance", "Ambulance", null, new { @class = "btn btn-primary" }) <br /><br />
+}
+
+<table class="table table-bordered table-hover" id="ambulance">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Area</th>
+        </tr>
+    </thead>
+
+    @foreach (var ambu in Model.Ambulances)
+    {
+        <tr>
+            <td>@Html.ActionLink(ambu.Name, "Details", "Ambulance", new { id = ambu.Id }, null)</td>
+            <td>@ambu.Area</td>
+        </tr>
+    }
+
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+
+            var table = $("#ambulance").DataTable();
+
+
+            //$("#ambulance").on("click", ".js-delete", function () {
+            //    var button = $(this);
+
+            //    bootbox.confirm("Are You Sure To Delete This", function (result) {
+
+            //        if (result) {
+
+            //            $.ajax({
+
+            //                url: "/api/ambulances/" + button.attr("data-amu-id"),
+            //                method: "DELETE",
+            //                success: function () {
+
+            //                    table.row(button.parents("tr")).remove().draw();
+            //                    toastr.success("Record Deleted");
+            //                }
+            //            });
+            //        }
+            //    });
+            //});
+
+        });
+    </script>
+}

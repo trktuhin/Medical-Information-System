@@ -1,0 +1,91 @@
+﻿@using MedicalInformationSystem.Models
+@model MedicalInformationSystem.ViewModels.ListOfDoctorsViewModel
+
+@{
+    ViewBag.Title = "ListOfDoctors";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>List Of Doctors</h2>
+@if (!String.IsNullOrEmpty(Model.Massage))
+{
+    <p style="text-align: center">
+        @Model.Massage
+    </p>
+}
+
+@using (Html.BeginForm("Search","Doctor"))
+{
+    <div class="form-group">
+        @Html.Label("Doctor Area")
+        @Html.TextBox("Area", null, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @*@Html.Label("Select Category")*@
+        @Html.DropDownList("Category", new SelectList(Model.DoctorTypes, "Id", "Name"), "Select a Category", new { @class = "form-control", style = "float: left" })
+        <input type="submit" class="btn btn-primary" value="Filter" style="margin-left: 20px;" />
+    </div>
+
+    @*<input type="submit" class="btn btn-primary" value="Filter"/>*@
+}
+<br/>
+
+@if (Request.IsAuthenticated)
+{
+    @Html.ActionLink("New Doctor", "NewDoctor", "Doctor", null, new { @class = "btn btn-primary" }) <br /><br />
+}
+
+<table class="table table-bordered table-hover" id="doctor">
+    <thead>
+        <tr class="label-warning">
+            <th>Name</th>
+            <th>Specializes</th>
+
+        </tr>
+    </thead>
+
+    @foreach (Doctor doctor in Model.Doctors)
+    {
+        <tr>
+            <td>@Html.ActionLink(doctor.Name,"Details","Doctor",new {id = doctor.Id},null)</td>
+            <td>@doctor.DoctorType.Name</td>
+        </tr>
+    }
+</table>
+
+@section scripts
+{
+
+    <script>
+
+        $(document).ready(function () {
+
+            var table = $("#doctor").DataTable();
+
+
+
+            //$("#doctor").on("click", ".js-delete", function () {
+            //    var button = $(this);
+
+            //    bootbox.confirm("Are You Sure To Delete This", function (result) {
+
+            //        if (result) {
+
+            //            $.ajax({
+
+            //                url: "/api/doctors/" + button.attr("data-doctor-id"),
+            //                method: "DELETE",
+            //                success: function () {
+
+            //                    table.row(button.parents("tr")).remove().draw();
+            //                    toastr.success("Record Deleted");
+            //                }
+            //            });
+            //        }
+            //    });
+            //});
+
+        });
+
+    </script>
+}

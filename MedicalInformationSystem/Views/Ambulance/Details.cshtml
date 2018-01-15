@@ -1,0 +1,32 @@
+﻿@model MedicalInformationSystem.Models.Ambulance
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Name</th>
+        <td>@Model.Name</td>
+    </tr>
+    <tr>
+        <th>Area</th>
+        <td>@Model.Area</td>
+    </tr>
+    <tr>
+        <th>Hospital Name</th>
+        <td>@Model.HospitalName</td>
+    </tr>
+    <tr>
+        <th>Phone</th>
+        <td>@Model.Phone</td>
+    </tr>
+    <tr>
+        <th>Work Hour</th>
+        <td>@Model.WorkHour</td>
+    </tr>
+</table>

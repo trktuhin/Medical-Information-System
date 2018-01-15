@@ -1,0 +1,66 @@
+﻿@using MedicalInformationSystem.Controllers
+@model MedicalInformationSystem.Models.Hospital
+
+@{
+    ViewBag.Title = "NewHospital";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    string massage;
+    if (!User.IsInRole(UserRoles.CanApproveAndDeleteRecord))
+    {
+        massage = "Record Has Been Submitted For Approval";
+    }
+    else
+    {
+        massage = "";
+    }
+}
+
+<h2>New Hospital</h2>
+
+@using (Html.BeginForm("SaveHospital","Hospital",new {massage = massage}))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name,new {@class = "form-control"})
+        @Html.ValidationMessageFor(m => m.Name)
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Phone)
+        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Phone)
+    </div>
+    
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Area)
+        @Html.TextBoxFor(m => m.Area, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Area)
+    </div>
+    
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.WorkDays)
+        @Html.TextBoxFor(m => m.WorkDays, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.WorkDays)
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Address)
+        @Html.TextAreaFor(m => m.Address, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Address)
+    </div>
+    
+    
+    @Html.HiddenFor(m => m.Id)
+    @Html.AntiForgeryToken()
+    <input type="submit" class="btn btn-primary" value="Save"/>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

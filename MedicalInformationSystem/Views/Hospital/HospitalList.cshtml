@@ -1,0 +1,66 @@
+﻿@using MedicalInformationSystem.Models
+@model MedicalInformationSystem.ViewModels.HospitalListViewModel
+
+@{
+    ViewBag.Title = "HospitalList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Hospital List</h2>
+
+@Html.ActionLink("New Hospital","NewHospital","Hospital",null,new {@class = "btn btn-primary"}) <br/> <br/>
+
+<table class="table table-bordered table-hover" id="hospital">
+
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Area</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+
+    @foreach (Hospital hospital in Model.Hospitals)
+    {
+        <tr>
+            <td>@Html.ActionLink(hospital.Name,"Details","Hospital",new {id = hospital.Id},null)</td>
+            <td>@hospital.Area</td>
+            <td><button class="btn btn-link js-delete" data-hospital-id="@hospital.Id">Delete</button> || @Html.ActionLink("Edit","Edit","Hospital",new{id = hospital.Id},new{@class = "btn btn-link"})</td>
+        </tr>
+    }
+
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+
+           var table =  $("#hospital").DataTable();
+
+           $("#hospital").on("click", ".js-delete", function () {
+
+                var button = $(this);
+
+                bootbox.confirm("Are You sure To Delete This", function(result) {
+                    
+                    if (result) {
+
+                        $.ajax({
+                            
+                            url: "/api/hospitals/" + button.attr("data-hospital-id"),
+                            method: "DELETE",
+                            success: function() {
+
+                                table.row(button.parents("tr")).remove().draw();
+
+                                toastr.success("Record Deleted");
+                            }
+                        });
+                    }
+
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,61 @@
+﻿@using MedicalInformationSystem.Controllers
+@model MedicalInformationSystem.Models.Pharmacy
+
+@{
+    ViewBag.Title = "NewPharmacy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Pharmacy</h2>
+
+@{
+    string massage;
+
+    if (!User.IsInRole(UserRoles.CanApproveAndDeleteRecord))
+    {
+        massage = "Record Has Been Submitted For Approval";
+    }
+    else
+    {
+        massage = "";
+    }
+}
+
+@using (Html.BeginForm("SavePharmacy","Pharmacy",new {massage = massage}))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name,new {@class="form-control"})
+        @Html.ValidationMessageFor(m => m.Name)
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Area)
+        @Html.TextBoxFor(m => m.Area, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Area)
+    </div>
+    
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Phone)
+        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Phone)
+    </div>
+    
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Address)
+        @Html.TextAreaFor(m => m.Address, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Address)
+    </div>
+    
+    
+    @Html.HiddenFor(m => m.Id)
+    @Html.AntiForgeryToken()
+    <input type="submit" value="Save" class="btn btn-primary"/>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

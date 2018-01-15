@@ -1,0 +1,73 @@
+﻿@model MedicalInformationSystem.ViewModels.HospitalDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Name</th>
+        <td>@Model.Hospital.Name</td>
+    </tr>
+    <tr>
+        <th>Area</th>
+        <td>@Model.Hospital.Area</td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td>@Model.Hospital.Address</td>
+    </tr>
+    <tr>
+        <th>Phone</th>
+        <td>@Model.Hospital.Phone</td>
+    </tr>
+    <tr>
+        <th>Phone</th>
+        <td>@Model.Hospital.Phone</td>
+    </tr>
+</table>
+
+
+
+@if (Model.Doctors.Any())
+{
+    <hr /><hr />
+    <h2>Doctors In This Hospital</h2>
+    <table class="table table-hover table-bordered">
+
+        <tr>
+            <th>Name</th>
+            <th>Spcialised</th>
+        </tr>
+        @foreach (var doctor in Model.Doctors)
+        {
+            <tr>
+                <td>@Html.ActionLink(doctor.Name, "Details", "Doctor", new { id = doctor.Id }, null)</td>
+                <td>@doctor.DoctorType.Name</td>
+            </tr>
+        }
+    </table>
+}
+
+@if (Model.Ambulances.Any())
+{
+    <hr /><hr />
+    <h2>Ambulances Related with Hospital</h2>
+    <table class="table table-hover table-bordered">
+
+        <tr>
+            <th>Name</th>
+            <th>Contact</th>
+        </tr>
+        @foreach (var doctor in Model.Ambulances)
+        {
+            <tr>
+                <td>@Html.ActionLink(doctor.Name, "Details", "Ambulance", new { id = doctor.Id }, null)</td>
+                <td>@doctor.Phone</td>
+            </tr>
+        }
+    </table>
+}
